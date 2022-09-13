@@ -6,8 +6,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -45,6 +43,26 @@
       <kbd>L</kbd>
       <span class="sound">tink</span>
     </div>
+    <script>
+      window.addEventListener('keydown', function(e) {
+        // you can specify audio element by it's datakey, make sure e.keyCode is a string.
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        if(!audio) return;
+        audio.currentTime = 0;
+        audio.play();
+
+        const keyButton = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        keyButton.classList.add("playing");
+      });
+
+      function removeTransition(e) {
+        if(e.propertyName !== 'transform') return;
+        this.classList.remove("playing");
+      }
+
+      const keys = document.querySelectorAll(".key");
+      keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    </script>
   </div>
 
   <audio data-key="65" src="sounds/clap.wav"></audio>
